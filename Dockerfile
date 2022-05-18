@@ -46,12 +46,16 @@ RUN apt-get install -y python3-catkin-tools python3-colcon-common-extensions pyt
 ## 環境設定
 #RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 
-RUN git clone https://github.com/ros2/ros1_bridge.git
-
+# Setting ros1_bridge
+RUN mkdir -p /ros1_bridge_ws/src/
+RUN cd /ros1_bridge_ws/src && \
+    git clone https://github.com/ros2/ros1_bridge.git
+RUN cd /ros1_bridge_ws && \
+    /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash; source /opt/ros/$ROS2_DISTRO/setup.bash; colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure"
 
 # x serverの導入
 RUN apt-get update && \
     apt-get install -y xserver-xorg x11-apps
 
 # 開始ディレクトリ
-WORKDIR /root/ros2_ws
+WORKDIR /ros1_bridge_ws

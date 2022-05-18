@@ -1,5 +1,20 @@
-version: '3'
+version: '3.9'
 services:
+  roscore:
+    build: .
+    container_name: roscore
+    tty: true
+    network_mode: "host"
+    command: /bin/bash -c "source /opt/ros/noetic/setup.bash; roscore"
+
   ros1bridge:
     build: .
     container_name: ros1bridge
+    tty: true
+    network_mode: "host"
+    depends_on:
+      - roscore
+    environment:
+      - ROS_MASTER_URI=http://localhost:11311
+    command: /bin/bash -c "source /opt/ros/noetic/setup.bash; source /opt/ros/foxy/setup.bash; source /ros1_bridge_ws/install/setup.bash; ros2 run ros1_bridge dynamic_bridge"
+
