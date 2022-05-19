@@ -7,6 +7,7 @@ ENV ROS2_DISTRO foxy
 
 
 # Setting locale
+RUN echo "-----Setting up locale-----"
 RUN apt-get update && apt-get install -y locales && \
     dpkg-reconfigure locales && \
     locale-gen ja_JP ja_JP.UTF-8 && \
@@ -34,28 +35,29 @@ RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt
     apt-get update && apt-get install -y ros-$ROS_DISTRO-desktop 
     
 
-# ROS2パッケージのインストール
+# Install ROS2
 RUN echo "-----Install ROS2-----"
 RUN sh -c 'echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/ros2-latest.list' && \
     apt-get update && apt-get install -y ros-$ROS2_DISTRO-desktop
 
-# Install ROS plugins 
+# Install ROS plugins
+RUN echo "-----Install ROS Plugins-----"
 RUN apt-get install -y python3-catkin-tools python3-colcon-common-extensions python3-rosdep python3-argcomplete
-    
-
-## 環境設定
-#RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 
 # Setting ros1_bridge
+RUN echo "-----Execution of ros1_bridge environment construction-----"
 RUN mkdir -p /ros1_bridge_ws/src/
 RUN cd /ros1_bridge_ws/src && \
     git clone https://github.com/ros2/ros1_bridge.git
 RUN cd /ros1_bridge_ws && \
     /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash; source /opt/ros/$ROS2_DISTRO/setup.bash; colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure"
 
-# x serverの導入
+# Install x-server
+RUN echo "-----Install x-server-----"
 RUN apt-get update && \
     apt-get install -y xserver-xorg x11-apps
 
-# 開始ディレクトリ
+# Starting directory
+RUN echo "-----Setup is complete!-----"
+RUN echo "-----The starting directory is /ros1_bridge_ws.-----"
 WORKDIR /ros1_bridge_ws
