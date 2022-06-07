@@ -37,18 +37,31 @@ Enter the container :
 docker-compose exec ${container name} bash
 
 # example
-docker-compose exec ros1bridge bash
+docker-compose exec ros1-bridge bash
 ```
 
-Communication between ROS1 and ROS2 in a container :
+Communication between ROS1 and ROS2 in a container : <br>
+ros1(publisher) → ros2(subscriber)
 ```
 # Terminal 1
-source /opt/ros/noetic/setup.bash
+noetic-setup
 rosrun rospy_tutorials talker
 
 # Terminal 2
-source /opt/ros/foxy/setup.bash
+foxy-setup
 ros2 run demo_nodes_cpp listener
+```
+
+ros2(publisher) → ros1(subscriber)
+```
+# Terminal 1
+foxy-setup
+ros2 run demo_nodes_cpp talker
+
+
+# Terminal 2
+noetic-setup
+rosrun rospy_tutorials listener
 ```
 
 
