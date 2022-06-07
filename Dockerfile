@@ -5,7 +5,6 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV ROS_DISTRO noetic
 ENV ROS2_DISTRO foxy
 
-
 # Setting locale
 RUN echo "-----Setting up locale-----"
 RUN apt-get update && apt-get install -y locales && \
@@ -51,6 +50,23 @@ RUN cd /ros1_bridge_ws/src && \
     git clone https://github.com/ros2/ros1_bridge.git
 RUN cd /ros1_bridge_ws && \
     /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash; source /opt/ros/$ROS2_DISTRO/setup.bash; colcon build --symlink-install --packages-select ros1_bridge --cmake-force-configure"
+
+# Personal ROS settings
+RUN mkdir -p /root/Programs/Settings
+COPY settings/ros/.ros_config /.ros_config
+COPY settings/ros/rosSetup.txt  /root/Programs/Settings/rosSetup_CRLF.txt
+RUN sed "s/\r//g" /root/Programs/Settings/rosSetup_CRLF.txt > /root/Programs/Settings/rosSetup.txt && \
+    cat /root/Programs/Settings/rosSetup.txt >> /root/.bashrc && \
+    echo "" >> /root/.bashrc
+
+# install powerline-shell
+RUN pip3 install powerline-shell
+COPY settings/powerline/powerlineSetup.txt /root/Programs/Settings/powerlineSetup_CRLF.txt
+RUN sed "s/\r//g" /root/Programs/Settings/powerlineSetup_CRLF.txt > /root/Programs/Settings/powerlineSetup.txt && \
+    cat /root/Programs/Settings/powerlineSetup.txt >> /root/.bashrc && \
+    echo "" >> /root/.bashrc
+RUN mkdir -p /root/.config/powerline-shell
+COPY settings/powerline/config.json /root/.config/powerline-shell/config.json
 
 # Install x-server
 RUN echo "-----Install x-server-----"

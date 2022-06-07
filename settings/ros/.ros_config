@@ -1,0 +1,13 @@
+# Setup ROS1
+noetic-setup() {
+    source /opt/ros/noetic/setup.bash
+}
+
+foxy-setup() {
+    source /opt/ros/foxy/setup.bash
+}
+
+# Change ROS_DOMAIN_ID
+change_domain-id() {
+    export ROS_DOMAIN_ID=$1
+}
