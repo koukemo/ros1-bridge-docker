@@ -56,13 +56,15 @@ RUN mkdir -p /root/Programs/Settings
 COPY settings/ros/.ros_config /.ros_config
 COPY settings/ros/rosSetup.txt  /root/Programs/Settings/rosSetup_CRLF.txt
 RUN sed "s/\r//g" /root/Programs/Settings/rosSetup_CRLF.txt > /root/Programs/Settings/rosSetup.txt && \
-    cat /root/Programs/Settings/rosSetup.txt >> /root/.bashrc
+    cat /root/Programs/Settings/rosSetup.txt >> /root/.bashrc && \
+    echo "" >> /root/.bashrc
 
 # install powerline-shell
 RUN pip3 install powerline-shell
 COPY settings/powerline/powerlineSetup.txt /root/Programs/Settings/powerlineSetup_CRLF.txt
 RUN sed "s/\r//g" /root/Programs/Settings/powerlineSetup_CRLF.txt > /root/Programs/Settings/powerlineSetup.txt && \
-    cat /root/Programs/Settings/powerlineSetup.txt >> /root/.bashrc
+    cat /root/Programs/Settings/powerlineSetup.txt >> /root/.bashrc && \
+    echo "" >> /root/.bashrc
 RUN mkdir -p /root/.config/powerline-shell
 COPY settings/powerline/config.json /root/.config/powerline-shell/config.json
 
