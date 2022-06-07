@@ -1,0 +1,11 @@
+{
+  "segments": [
+    "virtual_env",
+    "username",
+    "cwd",
+    {
+      "type": "env",
+      "var": "ROS_DOMAIN_ID"
+    }
+  ]
+}

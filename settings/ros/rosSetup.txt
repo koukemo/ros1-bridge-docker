@@ -1,0 +1,4 @@
+# ROS setup
+if [[ -f /.ros_config ]]; then
+    . /.ros_config
+fi
